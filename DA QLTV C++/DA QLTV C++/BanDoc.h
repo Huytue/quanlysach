@@ -22,6 +22,6 @@ public:
 		this->sHoTen = sHoTen;
 		this->sKhoa = sKhoa;
 	}
-	~BanDoc(void){};
+	~BanDoc(){};
 };
 

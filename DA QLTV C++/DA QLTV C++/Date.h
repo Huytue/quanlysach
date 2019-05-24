@@ -28,5 +28,5 @@ public:
 	int getThang();
 	int getNam();
 	void xuat();
-	~Date(void){};
+	~Date(){};
 };

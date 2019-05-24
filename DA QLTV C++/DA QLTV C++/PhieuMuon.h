@@ -42,19 +42,19 @@ public:
 	}
 	PhieuMuon(string sMaBD = "",string sMaSach = ""): xBanDoc(sMaBD), xSach(sMaSach)
 	{
-	//	time_t t = time(0); 
-	///*	struct tm *Now =localtime(&t);*/
-	//	xNgayMuon.setNgay(Now->tm_mday);
-	//	xNgayMuon.setThang(Now->tm_mon + 1);
-	//	xNgayMuon.setNam(Now->tm_year + 1900);
+		time_t t = time(0); 
+		struct tm *Now =localtime(&t);
+		xNgayMuon.setNgay(Now->tm_mday);
+		xNgayMuon.setThang(Now->tm_mon + 1);
+		xNgayMuon.setNam(Now->tm_year + 1900);
 
-	//	xNgayTra.setNgay(nNgayPlus(7));
-	//	xNgayTra.setThang(nThangPlus(7));
-	//	xNgayTra.setNam(nNamPlus(7));
-	//	
-	//	this->nTongPM++;
-	//	this->nMaPM = nTongPM;
-	//	this->nTrangThai = 1;
+		xNgayTra.setNgay(nNgayPlus(7));
+		xNgayTra.setThang(nThangPlus(7));
+		xNgayTra.setNam(nNamPlus(7));
+		
+		this->nTongPM++;
+		this->nMaPM = nTongPM;
+		this->nTrangThai = 1;
 	}
-	~PhieuMuon(void){};
+	~PhieuMuon(){};
 };

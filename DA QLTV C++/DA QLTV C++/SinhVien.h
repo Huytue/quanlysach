@@ -9,6 +9,6 @@ public:
 	{
 		this->nKhoaHoc = nKhoaHoc;
 	}
-	~SinhVien(void) {};
+	~SinhVien() {};
 };
 

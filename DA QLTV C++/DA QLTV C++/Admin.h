@@ -17,6 +17,6 @@ public:
 	string getPass();
 	void setUser(string US);
 	void setPass(string PA);
-	~Admin(void){};
+	~Admin(){};
 };
 

@@ -35,6 +35,6 @@ public:
 		this->nSoTrang = nSoTrang;
 		this->nTinhTrang = nTinhTrang;
 	}
-	~Sach(void){};
+	~Sach(){};
 };
 

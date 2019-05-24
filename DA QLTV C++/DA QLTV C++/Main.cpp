@@ -11,7 +11,6 @@
 #include <string>
 #include <Windows.h>
 #include <list>
-
 #include <conio.h>
 #include <sstream>
 #include <iomanip>
@@ -22,11 +21,12 @@
 #include "Sach.h"
 using namespace std;
 int PhieuMuon::nTongPM = 0;
+void dangNhap(list <Admin> L1, list <BanDoc*> L2, list <Sach> L3, list <PhieuMuon> L4);
 //Admin
-void inputData_Admin(list <Admin> &L);
-int outputData_Admin(list <Admin> L);
-void login_Admin(list <Admin> L, list <Sach> L3, list <BanDoc*> L2, list <PhieuMuon> L4);
-void textColor(WORD color); 
+void nhapAdmin(list <Admin> &L);
+int xuatAdmin(list <Admin> L);
+void dangNhapAdmin(list <Admin> L, list <Sach> L3, list <BanDoc*> L2, list <PhieuMuon> L4);
+void textColor(int color); 
 string passwordInput(unsigned maxLength);
 //DS ban doc
 void inputData_BanDoc(list <BanDoc*> &L2);
@@ -75,12 +75,18 @@ void main()
 	list <BanDoc*> L2;
 	list <Sach> L3;
 	list <PhieuMuon> L4;
-	inputData_Admin(L1);
+	dangNhap(L1, L2, L3, L4);
+	system("pause");
+}
+//Dang nhap
+void dangNhap(list <Admin> L1, list <BanDoc*> L2, list <Sach> L3, list <PhieuMuon> L4)
+{
+	nhapAdmin(L1);
 	inputData_BanDoc(L2);
 	inputData_Sach(L3);
 	inputData_PhieuMuon(L4);
 	int nChucNangMenu = 0;
-	while( true )
+	while (true)
 	{
 		system("cls");
 		cout << "\t\t*******************************************\n";
@@ -111,8 +117,8 @@ void main()
 		}
 		else if (nChucNangMenu == 3)
 		{
-			while(true)
-			{		
+			while (true)
+			{
 				system("cls");
 				cout << "\t\t*******************************************\n";
 				cout << "\t\t  1. Tim sach theo ma sach.                \n";
@@ -124,19 +130,19 @@ void main()
 				if (nChucNangMenu != 1 && nChucNangMenu != 2 && nChucNangMenu != 0)
 				{
 					cout << "Nhap sai vui long lua chon lai.\n";
-					system("pause");					
+					system("pause");
 				}
 				else if (nChucNangMenu == 1)
 				{
 					cout << "\t\t*Tim sach theo ma sach*\n";
 					timKiem(L3);
-					system("pause");				
+					system("pause");
 				}
 				else if (nChucNangMenu == 2)
 				{
 					cout << "\t\t*Tim ban doc theo ma ban doc*\n";
 					timKiemBanDoc(L2);
-					system("pause");				
+					system("pause");
 				}
 				else if (nChucNangMenu == 0)
 				{
@@ -147,7 +153,7 @@ void main()
 		}
 		else if (nChucNangMenu == 4)
 		{
-			login_Admin(L1, L3, L2, L4);
+			dangNhapAdmin(L1, L3, L2, L4);
 			system("pause");
 		}
 		else if (nChucNangMenu == 0)
@@ -155,7 +161,6 @@ void main()
 			break;
 		}
 	}
-	system("pause");
 }
 //Phieu muon
 void xuat_DS_PM_HetHanMuonSach(list <PhieuMuon> L4)
@@ -164,20 +169,20 @@ void xuat_DS_PM_HetHanMuonSach(list <PhieuMuon> L4)
 	int nThangTra = 0;
 	int nNamTra = 0;
 	time_t t = time(0); 
-	/*struct tm *Now = localtime(&t);*/
-	//int nNgayHienTai = Now->tm_mday;
-	//int nThangHienTai = Now->tm_mon+1;
-	//int nNamHienTai = Now->tm_year+1900;
+	struct tm *Now = localtime(&t);
+	int nNgayHienTai = Now->tm_mday;
+	int nThangHienTai = Now->tm_mon+1;
+	int nNamHienTai = Now->tm_year+1900;
 	list <PhieuMuon> ::iterator p = L4.begin();
 	while(p != L4.end())
 	{
 		nNgayTra = p->getNgayTra().getNgay();
 		nThangTra = p->getNgayTra().getThang();
 		nNamTra = p->getNgayTra().getNam();
-	/*	if (ktrHetHanMuon(nNgayTra, nThangTra, nNamTra, nNgayHienTai, nThangHienTai, nNamHienTai) == true && p->getTrangThai() != 0)
+		if (ktrHetHanMuon(nNgayTra, nThangTra, nNamTra, nNgayHienTai, nThangHienTai, nNamHienTai) == true && p->getTrangThai() != 0)
 		{
 			p->xuat();
-		}*/
+		}
 		p++;
 	}	
 }
@@ -1123,22 +1128,8 @@ string passwordInput(unsigned maxLength)
 	}
 	return pw;
 }
-void textColor(WORD color)
-{
-	HANDLE hConsoleOutput;
-	hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
- 
-	CONSOLE_SCREEN_BUFFER_INFO screen_buffer_info;
-	GetConsoleScreenBufferInfo(hConsoleOutput, &screen_buffer_info);
- 
-	WORD wAttributes = screen_buffer_info.wAttributes;
-	color &= 0x000f;
-	wAttributes &= 0xfff0;
-	wAttributes |= color;
- 
-	SetConsoleTextAttribute(hConsoleOutput, wAttributes);
-}
-void login_Admin(list <Admin> L, list <Sach> L3, list <BanDoc*> L2, list <PhieuMuon> L4)
+
+void dangNhapAdmin(list <Admin> L, list <Sach> L3, list <BanDoc*> L2, list <PhieuMuon> L4)
 {
 	int nChucNangMenu = 0;
 	string sU = "";
@@ -1156,7 +1147,7 @@ void login_Admin(list <Admin> L, list <Sach> L3, list <BanDoc*> L2, list <PhieuM
 		cout << "\t\t Nhap \"ESC\" de thoat!\n";
 		textColor(7);
 		cout << "\n\t\tNhap Username: ";
-		fflush(stdin);
+		rewind(stdin);
 		getline(cin, sU);
 		if(sU == "ESC" || sU == "esc")
 		{
@@ -1164,7 +1155,7 @@ void login_Admin(list <Admin> L, list <Sach> L3, list <BanDoc*> L2, list <PhieuM
 			break;
 		}
 		cout << "\n\t\tNhap Password: ";
-		fflush(stdin);
+		rewind(stdin);
 		sP = passwordInput(6);
 		list <Admin>::iterator p = L.begin();
 		while(p != L.end())
@@ -1381,7 +1372,7 @@ void login_Admin(list <Admin> L, list <Sach> L3, list <BanDoc*> L2, list <PhieuM
 	}
 
 }
-int outputData_Admin(list <Admin> L)
+int xuatAdmin(list <Admin> L)
 {
 	int nDem = 0;
 	Admin Ad;
@@ -1397,22 +1388,28 @@ int outputData_Admin(list <Admin> L)
 	}
 	return nDem;
 }
-void inputData_Admin(list <Admin> &L)
+void nhapAdmin(list <Admin> &L)
 {
-	ifstream File;
-	File.open("Admin.txt");
-	while(!File.eof())
+	ifstream fcin;
+	fcin.open("Admin.txt");
+	while(!fcin.eof())
 	{
 		Admin Ad;
-		string u = "";
-		string p = "";
-		getline(File, u, ',');
-		Ad.setUser(u);
-		getline(File, p);
-		Ad.setPass(p);
+		string a = "";
+		string b = "";
+		getline(fcin, a, ',');
+		Ad.setUser(a);
+		getline(fcin, b);
+		Ad.setPass(b);
 		L.push_back(Ad);
-		File.ignore(0,'\n');
+		fcin.ignore(0,'\n');
 	}
-	File.close();
+	fcin.close();
 	
+}
+void textColor(int color)
+{
+	HANDLE hC;
+	hC = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hC, color);
 }

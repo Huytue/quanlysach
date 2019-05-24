@@ -12,6 +12,6 @@ public:
 		this->sDiaChi = sDiaChi;
 		this->sSDT = sSDT;
 	}
-	~GiaoVien(void){};
+	~GiaoVien(){};
 };
 
