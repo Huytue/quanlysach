@@ -59,10 +59,10 @@ void timKiem(list <Sach> L3);
 int nDemSachChuaMuon(list <Sach> L3);
 int nDemSachDaMuon(list <Sach> L3);
 //Phieu muon
-void inputData_PhieuMuon(list <PhieuMuon> &L4);
+void docPhieuMuon(list <PhieuMuon> &L4);
 void them_PhieuMuon(list <PhieuMuon> &L4, list <BanDoc*> L2, list <Sach> &L3);
-void outputData_PhieuMuon_ToScreen(list <PhieuMuon> L4);
-void outputData_PhieuMuon_File(list <PhieuMuon> L4, list <BanDoc*> L2, list <Sach> L3);
+void xuatPhieuMuon(list <PhieuMuon> L4);
+void ghiPhieuMuon(list <PhieuMuon> L4, list <BanDoc*> L2, list <Sach> L3);
 int demTongPhieuMuon(list <PhieuMuon> L4);
 void traSach_PhieuMuon(list <PhieuMuon> &L4, list <BanDoc*> L2, list <Sach> &L3);
 void lietKeSach1BanDocDangMuon(list <PhieuMuon> L4, list <Sach> L3);
@@ -84,7 +84,7 @@ void dangNhap(list <Admin> L1, list <BanDoc*> L2, list <Sach> L3, list <PhieuMuo
 	nhapAdmin(L1);
 	inputData_BanDoc(L2);
 	inputData_Sach(L3);
-	inputData_PhieuMuon(L4);
+	docPhieuMuon(L4);
 	int nChucNangMenu = 0;
 	while (true)
 	{
@@ -211,12 +211,12 @@ void lietKeSach1BanDocDangMuon(list <PhieuMuon> L4, list <Sach> L3)
 {
 	int flag = 0;
 	string sMBD = "";
-dd:
+
 	textColor(4);
-	cout << "\t\tNhap N de thoat!\n";
+dd: cout << "\t\tNhap N de thoat!\n";
 	textColor(7);
 	cout << "\t\tNhap ma ban doc: ";
-	fflush(stdin);
+	rewind(stdin);
 	getline(cin, sMBD);
 	if (sMBD == "N")
 	{
@@ -267,9 +267,10 @@ void traSach_PhieuMuon(list <PhieuMuon> &L4, list <BanDoc*> L2, list <Sach> &L3)
 	{
 		dd:
 		system("cls");
+		textColor(13);
 		cout << "\t\tNhap ma phieu muon can tra sach: "; cin >> nMPM;
-		list <PhieuMuon> ::iterator p = L4.begin();
-		while(p != L4.end())
+		
+		for (list <PhieuMuon> ::iterator p = L4.begin(); p != L4.end(); p++)
 		{
 			if (nMPM == p->getMaPM())
 			{
@@ -279,7 +280,7 @@ void traSach_PhieuMuon(list <PhieuMuon> &L4, list <BanDoc*> L2, list <Sach> &L3)
 					p->setTrangThai(0); // gán trạng thái 0 cho phiếu mượn đang muốn trả
 					string sMaSach = p->getSach().getMS();
 					list <Sach> ::iterator q = L3.begin();
-					while(q != L3.end())
+					while (q != L3.end())
 					{
 						if (q->getMS() == sMaSach)
 						{
@@ -289,19 +290,21 @@ void traSach_PhieuMuon(list <PhieuMuon> &L4, list <BanDoc*> L2, list <Sach> &L3)
 						q++;
 					}
 					outputData_Sach_File(L3);
-					outputData_PhieuMuon_File(L4, L2, L3);
+					ghiPhieuMuon(L4, L2, L3);
 					textColor(10);
 					cout << "\t\tTra sach thanh cong!\n";
 					textColor(7);
 					break;
 				}
-				textColor(4);
-				cout << "\t\tMa phieu muon da duoc tra!\n";
-				textColor(7);
-				system("pause");
-				goto dd;
+				else
+				{
+					textColor(4);
+					cout << "\t\tMa phieu muon da duoc tra!\n";
+					textColor(7);
+					system("pause");
+					break;
+				}
 			}
-			p++;
 		}
 		if (flag == 0)
 		{
@@ -310,7 +313,7 @@ void traSach_PhieuMuon(list <PhieuMuon> &L4, list <BanDoc*> L2, list <Sach> &L3)
 			textColor(7);
 			system("pause");
 		}
-		else if(flag == 1)
+		else if (flag == 1)
 		{
 			break;
 		}
@@ -329,56 +332,59 @@ int demTongPhieuMuon(list <PhieuMuon> L4)
 }
 void them_PhieuMuon(list <PhieuMuon> &L4, list <BanDoc*> L2, list <Sach> &L3)
 {
-	string sMBD = "";
+	string sMaBD = "";
 	while(true)
 	{
-		system("cls");
+	a:	system("cls");
 		textColor(4);
-		cout << "\t\tNhap N de thoat!\n";
-		textColor(7);
+		cout << "\t\t\tNhap N de thoat!\n";
+		cout << "\t-------------------------------------------------\n";
+		textColor(11);
 		cout << "\t\tNhap ma ban doc can muon sach: ";
-		fflush(stdin);
-		getline(cin, sMBD);
-		if (sMBD == "")
+		rewind(stdin);
+		getline(cin, sMaBD);
+		if (sMaBD == "")
 		{
 			textColor(4);
-			cout << "Khong duoc de trong ! \n";
-			textColor(7);
+			cout << "\t\tKhong duoc de trong ! \n";
+			cout << "\t\t";
 			system("pause");
+			goto a;
 		}
-		else if (sMBD == "N")
+		else if (sMaBD == "N")
 		{
 			textColor(10);
 			cout << "\t\tBan chon thoat!\n";
 			textColor(7);
 			return;
 		}
-		else if (kiemTraBD(L2, sMBD) != true)
+		else if (kiemTraBD(L2, sMaBD) != true)
 		{
 			textColor(4);
 			cout << "\t\tMa ban doc khong ton tai!\n";
-			textColor(7);
+			cout << "\t\t";
 			system("pause");
+			goto a;
 		}
 		else
 		{
 			break;
 		}
 	}
-	string sMS = "";
+	string sMaSach = "";
 	while(true)
 	{
+	b:	textColor(11);
 		cout << "\t\tNhap ma sach: ";
-		fflush(stdin);
-		getline(cin, sMS);
-		if (sMS == "")
+		rewind(stdin);
+		getline(cin, sMaSach);
+		if (sMaSach == "")
 		{
 			textColor(4);
-			cout << "Khong duoc de trong ! \n";
-			textColor(7);
-			system("pause");
+			cout << "\t\tKhong duoc de trong ! \n";
+			goto b;
 		}
-		else if (kiemTraSach_DuTieuChuanMuon(L3, sMS) == true)
+		else if (kiemTraSach_DuTieuChuanMuon(L3, sMaSach) == true)
 		{
 			break;
 		}
@@ -386,24 +392,23 @@ void them_PhieuMuon(list <PhieuMuon> &L4, list <BanDoc*> L2, list <Sach> &L3)
 		{
 			textColor(4);
 			cout << "\t\tMa sach khong ton tai! hoac dang co ban doc muon.\n";
-			textColor(7);
-			system("pause");
+			goto b;
 		}	
 	}
-	PhieuMuon pm(sMBD, sMS);
+	PhieuMuon pm(sMaBD, sMaSach);
 	L4.push_back(pm);
 	textColor(10);
 	cout << "\t\tTao phieu muon thanh cong!\n";
 	textColor(7);
-	ofstream File;
-	File.open("PhieuMuon.txt", ios::app);
-	File << "\n" << L4.rbegin()->getMaPM() << "," << L4.rbegin()->getBanDoc().getMBD() << "," << L4.rbegin()->getSach().getMS() << "," << L4.rbegin()->getNgayMuon().getNgay() << "," << L4.rbegin()->getNgayMuon().getThang() << "," << L4.rbegin()->getNgayMuon().getNam() << ","  << L4.rbegin()->getNgayTra().getNgay() << "," << L4.rbegin()->getNgayTra().getThang() << "," << L4.rbegin()->getNgayTra().getNam() << "," << L4.rbegin()->getTrangThai();
-	File.close();
+	ofstream fin;
+	fin.open("PhieuMuon.txt", ios::app);
+	fin << "\n" << L4.rbegin()->getMaPM() << "," << L4.rbegin()->getBanDoc().getMBD() << "," << L4.rbegin()->getSach().getMS() << "," << L4.rbegin()->getNgayMuon().getNgay() << "," << L4.rbegin()->getNgayMuon().getThang() << "," << L4.rbegin()->getNgayMuon().getNam() << ","  << L4.rbegin()->getNgayTra().getNgay() << "," << L4.rbegin()->getNgayTra().getThang() << "," << L4.rbegin()->getNgayTra().getNam() << "," << L4.rbegin()->getTrangThai();
+	fin.close();
 	int nTT = L4.rbegin()->getMaPM(); // trang thai
 	list <Sach> ::iterator p = L3.begin();
 	while(p != L3.end())
 	{
-		if (p->getMS() == sMS)
+		if (p->getMS() == sMaSach)
 		{
 			p->setTT(nTT);// tinh trang
 			break;
@@ -413,27 +418,27 @@ void them_PhieuMuon(list <PhieuMuon> &L4, list <BanDoc*> L2, list <Sach> &L3)
 	outputData_Sach_File(L3);
 
 }
-void outputData_PhieuMuon_File(list <PhieuMuon> L4, list <BanDoc*> L2, list <Sach> L3)
+void ghiPhieuMuon(list <PhieuMuon> L4, list <BanDoc*> L2, list <Sach> L3)
 {
 	
 	int nTongPM = demTongPhieuMuon(L4);
 	int nDem = 1;
-	ofstream File;
-	File.open("PhieuMuon.txt");
+	ofstream fout;
+	fout.open("PhieuMuon.txt");
 	list <PhieuMuon> ::iterator p = L4.begin();
 	while (p != L4.end())
 	{
-		File << p->getMaPM() << "," << p->getBanDoc().getMBD() << "," << p->getSach().getMS() << "," << p->getNgayMuon().getNgay() << "," << p->getNgayMuon().getThang() << "," << p->getNgayMuon().getNam() << "," << p->getNgayTra().getNgay() << "," << p->getNgayTra().getThang() << "," << p->getNgayTra().getNam() << "," << p->getTrangThai();
+		fout << p->getMaPM() << "," << p->getBanDoc().getMBD() << "," << p->getSach().getMS() << "," << p->getNgayMuon().getNgay() << "," << p->getNgayMuon().getThang() << "," << p->getNgayMuon().getNam() << "," << p->getNgayTra().getNgay() << "," << p->getNgayTra().getThang() << "," << p->getNgayTra().getNam() << "," << p->getTrangThai();
 		if (nDem < nTongPM)
 		{
-			File << endl;
+			fout << endl;
 			nDem++;
 		}
 		p++;
 	}
-	File.close();
+	fout.close();
 }
-void outputData_PhieuMuon_ToScreen(list <PhieuMuon> L4)
+void xuatPhieuMuon(list <PhieuMuon> L4)
 {
 	list <PhieuMuon> ::iterator p = L4.begin();
 	while(p != L4.end())
@@ -442,7 +447,7 @@ void outputData_PhieuMuon_ToScreen(list <PhieuMuon> L4)
 		p++;
 	}
 }
-void inputData_PhieuMuon(list <PhieuMuon> &L4)
+void docPhieuMuon(list <PhieuMuon> &L4)
 {
 	int nSPM = 0;
 	string sMBD = "";
@@ -454,32 +459,32 @@ void inputData_PhieuMuon(list <PhieuMuon> &L4)
 	int nThangTra = 0;
 	int nNamTra = 0;
 	int nTrangThai = 0;
-	ifstream File;
-	File.open("PhieuMuon.txt");
-	while(!File.eof())
+	ifstream fin;
+	fin.open("PhieuMuon.txt");
+	while(!fin.eof())
 	{
-		File >> nSPM;
-		File.ignore(1, ',');
-		getline(File, sMBD, ',');
-		getline(File, sMS, ',');
-		File >> nNgayMuon;
-		File.ignore(1, ',');
-		File >> nThangMuon;
-		File.ignore(1, ',');
-		File >> nNamMuon;
-		File.ignore(1, ',');
-		File >> nNgayTra;
-		File.ignore(1, ',');
-		File >> nThangTra;
-		File.ignore(1, ',');
-		File >> nNamTra;
-		File.ignore(1, ',');
-		File >> nTrangThai;
-		File.ignore(1, '\n');
+		fin >> nSPM;
+		fin.ignore(1, ',');
+		getline(fin, sMBD, ',');
+		getline(fin, sMS, ',');
+		fin >> nNgayMuon;
+		fin.ignore(1, ',');
+		fin >> nThangMuon;
+		fin.ignore(1, ',');
+		fin >> nNamMuon;
+		fin.ignore(1, ',');
+		fin >> nNgayTra;
+		fin.ignore(1, ',');
+		fin >> nThangTra;
+		fin.ignore(1, ',');
+		fin >> nNamTra;
+		fin.ignore(1, ',');
+		fin >> nTrangThai;
+		fin.ignore(1, '\n');
 		PhieuMuon pm(nSPM, sMBD,sMS,nNgayMuon,nThangMuon,nNamMuon,nNgayTra,nThangTra,nNamTra,nTrangThai);
 		L4.push_back(pm);
 	}
-	File.close();
+	fin.close();
 }
 //DS Ban Doc
 void inTheThuVien(int nLoai, string sMaBD, string HoTen, string sKhoa, int nNgay, int nThang, int nNam, string DC, string SDT, int KhoaHoc)
@@ -1167,6 +1172,7 @@ void dangNhapAdmin(list <Admin> L, list <Sach> L3, list <BanDoc*> L2, list <Phie
 				while(true)
 				{
 					system("cls");
+					textColor(11);
 					cout << "\t\t*******************************************\n";
 					cout << "\t\t  1. Quan ly phieu muon.                   \n";
 					cout << "\t\t  2. Quan ly sach.                         \n";
@@ -1187,6 +1193,7 @@ void dangNhapAdmin(list <Admin> L, list <Sach> L3, list <BanDoc*> L2, list <Phie
 						while(true)
 						{
 							system("cls");
+							textColor(10);
 							cout << "\t\t******************************************\n";
 							cout << "\t\t  1. Them phieu muon.                     \n";
 							cout << "\t\t  2. Tra Sach.                            \n";
@@ -1207,7 +1214,7 @@ void dangNhapAdmin(list <Admin> L, list <Sach> L3, list <BanDoc*> L2, list <Phie
 						}
 						else if (nChucNangMenu == 3)
 						{
-							outputData_PhieuMuon_ToScreen(L4);
+							xuatPhieuMuon(L4);
 							system("pause");
 						}
 						else if (nChucNangMenu == 0)
